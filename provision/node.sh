@@ -12,27 +12,27 @@ usermod -aG docker vagrant
 # You can add TLS for added security (docker-machine does this automagically)
 cat > /etc/docker/daemon.json <<END
 {
-    "hosts": [ 
+    "hosts": [
         "unix://",
         "tcp://0.0.0.0:2375"
     ],
     "experimental": true,
     "debug": true,
-    "metrics-addr": "0.0.0.0:9323" 
+    "metrics-addr": "0.0.0.0:9323"
 }
 END
 
-# You can't pass both CLI args and use the daemon.json for parameters, 
-# so I'm using the RPM systemd unit file because it doesn't pass any args 
+# You can't pass both CLI args and use the daemon.json for parameters,
+# so I'm using the RPM systemd unit file because it doesn't pass any args
 # This version changes the following as of 17.03:
 #  - Removes Requires=docker.socket
 #  - Removes docker.socket from After
 #  - Sets LimitNOFILE=infinity
-#  - Removes -H fd:// from ExecStart 
+#  - Removes -H fd:// from ExecStart
 wget -O /lib/systemd/system/docker.service https://raw.githubusercontent.com/docker/docker/v17.03.0-ce/contrib/init/systemd/docker.service.rpm
 systemctl daemon-reload
 systemctl restart docker
 
-# optional tools for learning 
+# optional tools for learning
 apt-get install -y -q ipvsadm tree
 # lsns is helpful from util-linux, this is installed already

@@ -3,7 +3,7 @@
 
 Vagrant.configure("2") do |config|
 
-    config.vm.box = "box-cutter/ubuntu1610"
+    config.vm.box = "ndn-jenkins/ubuntu1604-amd64"
     config.vm.provision "shell", path: "provision/node.sh", privileged: true
 
     # Managers
@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
         config.vm.define "m#{number}" do |node|
             node.vm.network "private_network", ip: "192.168.99.20#{number}"
             node.vm.hostname = "m#{number}"
-        end  
+        end
     end
 
     # Workers
@@ -19,12 +19,11 @@ Vagrant.configure("2") do |config|
         config.vm.define "w#{number}" do |node|
             node.vm.network "private_network", ip: "192.168.99.21#{number}"
             node.vm.hostname = "w#{number}"
-        end  
+        end
     end
 
     config.vm.provider "virtualbox" do |v|
-        v.memory = 2048 
+        v.memory = 2048
         v.cpus = 1
     end
-
 end
