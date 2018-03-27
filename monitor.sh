@@ -2,7 +2,7 @@
 
 service=$1
 
-if [ -z ${service} ]; then 
+if [ -z ${service} ]; then
     echo "You must pass a service:"
     echo "./monitor.sh web"
     exit;
@@ -20,18 +20,18 @@ tmux kill-session -t $sessionname
 tmux set-option remain-on-exit on
 
 
-tmux new-session -d -s $sessionname 
+tmux new-session -d -s $sessionname
 # tmux send-keys "$serviceinspect" C-m
 # tmux split-window -p 50 -h
 tmux send-keys "$servicels" C-m
 
-tmux split-window -p 75 -v 
+tmux split-window -p 75 -v
 tmux send-keys "$serviceps" C-m
 
-tmux split-window -p 30 -v 
+tmux split-window -p 30 -v
 # tmux select-pane -t 2
 tmux send-keys "$setdockerhost; clear" C-m
 
 
 
-tmux -2 attach-session -d -t $sessionname 
+tmux -2 attach-session -d -t $sessionname
