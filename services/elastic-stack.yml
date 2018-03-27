@@ -1,0 +1,60 @@
+# Send this command from inside a docker node in the swarm.
+#
+# wget --method=PUT --body-string='{"title" : "cadvisor*",  "timeFieldName": "container_stats.timestamp"}' http://elasticsearch:9200/.kibana/index-pattern/cadvisor
+
+version: '3.5'
+
+services:
+  viz:
+    image: dockersamples/visualizer
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    ports:
+      - "8090:8080"
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager
+  elasticsearch:
+    image: elasticsearch:2.4.0
+    volumes:
+      - type: volume
+        target: /usr/share/elasticsearch/data
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == w1
+  kibana:
+    image: kibana:4.6.0
+    depends_on:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+  cadvisor:
+        image: google/cadvisor:latest
+        depends_on:
+          - "elasticsearch"
+        volumes:
+            - type: bind
+              source: /
+              target: /rootfs
+              read_only: true
+            - type: bind
+              source: /var/run
+              target: /var/run
+              read_only: false
+            - type: bind
+              source: /sys
+              target: /sys
+              read_only: true
+            - type: bind
+              source: /var/lib/docker
+              target: /var/lib/docker
+              read_only: true
+        deploy:
+            mode: global
+        command: --storage_driver=elasticsearch --storage_driver_es_host=http://elasticsearch:9200

@@ -1,1 +1,12 @@
-# docker service create --network=monitoring   --mount type=volume,target=/usr/share/elasticsearch/data   --constraint node.hostname==w1   --name elasticsearch elasticsearch:2.4.0
+version: '3.2'
+
+services:
+  elasticsearch:
+    image: elasticsearch:2.4.0
+    volumes:
+      - type: volume
+        target: /usr/share/elasticsearch/data
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == w1

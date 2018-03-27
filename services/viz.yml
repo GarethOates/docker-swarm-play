@@ -1,13 +1,17 @@
-version: '3.1'
+# docker service create --name viz --publish 8090:8080 --mount=type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock --constraint=node.role==manager dockersamples/visualizer
+
+version: '3.5'
 
 services:
-    viz:
-        image: manomarks/visualizer
-        volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock"
-        ports:
-            - "8090:8080"
-        deploy:
-            placement:
-                constraints:
-                    - node.role==manager
+  viz:
+    image: dockersamples/visualizer
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    ports:
+      - "8090:8080"
+    deploy:
+      placement:
+        constraints:
+          - node.role==manager

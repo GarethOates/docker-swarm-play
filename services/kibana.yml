@@ -1,1 +1,10 @@
-# docker service create --network=monitoring --name kibana -e ELASTICSEARCH_URL="http://elasticsearch:9200" -p 5601:5601 kibana:4.6.0
+version: '3.2'
+
+kibana:
+    image: kibana:4.6.0
+    depends_on:
+      - "elasticsearch"
+    ports:
+      - "5601:5601"
+    environment:
+      - ELASTICSEARCH_URL="http://elasticsearch:9200"

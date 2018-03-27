@@ -1,2 +1,25 @@
-# docker service create --network=monitoring --mode global --name cadvisor   --mount type=bind,source=/,target=/rootfs,readonly=true   --mount type=bind,source=/var/run,target=/var/run,readonly=false   --mount type=bind,source=/sys,target=/sys,readonly=true   --mount type=bind,source=/var/lib/docker/,target=/var/lib/docker,readonly=true   google/cadvisor:latest   -storage_driver=elasticsearch   -storage_driver_es_host="http://elasticsearch:9200"
+version: '3.2'
 
+services:
+    cadvisor:
+        image: google/cadvisor:latest
+        volumes:
+            - type: bind
+              source: /
+              target: /rootfs
+              read_only: true
+            - type: bind
+              source: /var/run
+              target: /var/run
+              read_only: false
+            - type: bind
+              source: /sys
+              target: /sys
+              read_only: true
+            - type: bind
+              source: /var/lib/docker
+              target: /var/lib/docker
+              read_only: true
+        deploy:
+            mode: global
+        command: --storage_driver=elasticsearch --storage_driver_es_host=http://elasticsearch:9200
