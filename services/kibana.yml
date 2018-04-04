@@ -1,6 +1,7 @@
 version: '3.2'
 
-kibana:
+services:
+  kibana:
     image: kibana:4.6.0
     depends_on:
       - "elasticsearch"
